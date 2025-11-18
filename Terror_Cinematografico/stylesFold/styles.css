@@ -1,0 +1,182 @@
+body{
+    /* variables de tema (movidas a body para evitar :root) */
+    --bg-1: #0b0f12;
+    --bg-2: #141619;
+    --panel: #161616;
+    --accent: #c0392b;       /* rojo/ácido para acentos */
+    --text: #ECECEC;         /* texto claro sobre fondo oscuro */
+    --muted: #B8B8B8;        /* texto secundario */
+    --glass: rgba(255,255,255,0.03);
+    --radius: 10px;
+    --max-width: 1200px;
+    --gap: 1.25rem;
+    --transition: 240ms cubic-bezier(.2,.9,.3,1);
+
+    min-height:100vh;
+    font-family: "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
+    color:var(--text);
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(192,57,43,0.06), transparent 10%),
+                linear-gradient(180deg,var(--bg-1),var(--bg-2) 60%);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.45;
+
+    /* <- REMOVED grid on body to avoid fixed centered narrow column */
+    display:block;
+    padding:1.25rem; /* padding más contenido en móviles */
+}
+
+/* centraliza el contenido dentro de la grilla de body */
+.container{
+    /* ahora ocupa todo el ancho hasta max-width y se centra con margin:auto */
+    display:grid;
+    width:100%;
+    max-width:var(--max-width);
+    margin:0 auto;
+    grid-template-areas:
+        "header"
+        "nav"
+        "main"
+        "aside"
+        "footer";
+    gap:1rem;
+    align-items:start;
+}
+
+/* Estructura general: header, nav, main, aside, footer usan grid-area */
+header{grid-area:header;position:relative;overflow:hidden;border-radius:var(--radius);background:linear-gradient(90deg, rgba(192,57,43,0.12), rgba(0,0,0,0.2));padding:1rem 1.25rem;box-shadow:0 6px 20px rgba(0,0,0,0.5)}
+header h1{
+    font-size:clamp(1.25rem, 2.2vw, 2rem);
+    letter-spacing:1px;
+    text-transform:uppercase;
+    display:inline-block;
+    margin-left:0.25rem;
+    position:relative;
+    z-index:2;
+    color:var(--text);
+    text-shadow:0 2px 18px rgba(192,57,43,0.15);
+    animation:glow 4s linear infinite;
+}
+
+/* banner visual: film grain + image hint usando pseudo-elemento para no alterar HTML */
+header::before{
+    content:"";
+    position:absolute;inset:0;border-radius:inherit;
+    background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.55));
+    mix-blend-mode:overlay;pointer-events:none;
+}
+header::after{
+    content:"";
+    position:absolute;right:-10%;top:-10%;width:60%;height:140%;
+    background:radial-gradient(circle at 20% 30%, rgba(255,255,255,0.02), transparent 8%),
+               url("../ImgEntIntermedia/Hereditary-649240958-large.jpg") center/cover no-repeat;
+    opacity:0.12;filter:grayscale(70%) contrast(0.9);
+    transform:rotate(-12deg);pointer-events:none;
+}
+
+/* navegación */
+nav{grid-area:nav;background:var(--glass);border-radius:8px;padding:0.5rem 0.75rem;align-self:center}
+nav ul{display:flex;gap:0.5rem;list-style:none;justify-content:center;flex-wrap:wrap}
+nav a{display:block;padding:0.55rem 0.8rem;border-radius:6px;color:var(--text);text-decoration:none;font-weight:600;transition:var(--transition)}
+nav a:hover, nav a:focus{background:rgba(192,57,43,0.12);transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,0.45)}
+
+/* área principal con aside al lado en pantallas grandes */
+main{grid-area:main;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:1rem;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,0.45)}
+aside{grid-area:aside;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:1rem;border-radius:8px;height:fit-content;align-self:start;box-shadow:0 6px 20px rgba(0,0,0,0.35)}
+
+/* footer */
+footer{grid-area:footer;background:transparent;padding:0.75rem 1rem;color:var(--muted);font-size:0.95rem;display:flex;flex-direction:column;gap:0.5rem;align-items:center}
+
+/* contenedor principal: usa CSS Grid para estructura interna (sections) */
+main > section{margin-bottom:1.25rem;display:grid;gap:0.75rem}
+main h2{font-size:1.25rem;border-left:4px solid var(--accent);padding-left:0.6rem;color:var(--text)}
+main p, aside p, footer p{color:var(--muted)}
+
+/* figuras y multimedia: Flexbox para alinear imagen+texto */
+figure{display:flex;flex-direction:column;gap:0.45rem;align-items:flex-start}
+figure img{width:100%;height:auto;border-radius:8px;display:block;object-fit:cover;box-shadow:0 10px 30px rgba(0,0,0,0.5);transition:transform var(--transition),filter var(--transition)}
+figure img:hover{transform:scale(1.02);filter:brightness(1.02)}
+figcaption{font-size:0.9rem;color:var(--muted)}
+
+/* lista de películas: flex por item para imagen+texto */
+ol{list-style:decimal;margin-left:1.25rem}
+ol li{display:flex;gap:1rem;align-items:flex-start;padding:0.6rem;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);transition:box-shadow var(--transition),transform var(--transition)}
+ol li:not(:last-child){margin-bottom:0.6rem}
+ol li:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,0.5)}
+ol li strong{color:var(--text);min-width:140px}
+ol li figure{width:200px;flex:0 0 200px}
+ol li > div{display:flex;flex-direction:column;gap:0.4rem}
+
+/* tabla responsive */
+table{width:100%;border-collapse:collapse;background:transparent;color:var(--text);margin-top:0.5rem}
+th,td{padding:0.6rem 0.8rem;border-bottom:1px solid rgba(255,255,255,0.04);text-align:left}
+caption{caption-side:top;text-align:left;font-weight:700;margin-bottom:0.5rem}
+@media (max-width:900px){table{display:block;overflow:auto}}
+
+/* multimedia responsive */
+audio,video{max-width:100%;border-radius:8px;background:#000;display:block}
+
+/* formulario: grid para ordenar campos; usa flex para grupos internos */
+form{display:grid;gap:0.8rem}
+form fieldset{border:1px solid rgba(255,255,255,0.04);padding:0.8rem;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent)}
+form label{display:block;margin-bottom:0.25rem;font-weight:600;color:var(--muted);font-size:0.92rem}
+input[type="text"],input[type="email"],input[type="tel"],input[type="number"],input[type="date"],select,textarea{
+    width:100%;padding:0.55rem 0.7rem;border-radius:6px;border:1px solid rgba(255,255,255,0.03);background:rgba(0,0,0,0.35);color:var(--text);outline:none;transition:box-shadow var(--transition),border-color var(--transition)
+}
+input:focus,select:focus,textarea:focus{border-color:rgba(192,57,43,0.6);box-shadow:0 6px 18px rgba(192,57,43,0.08)}
+.form-row{display:flex;gap:0.6rem}
+.form-row > *{flex:1}
+
+/* botones */
+button{cursor:pointer;padding:0.6rem 0.9rem;border-radius:8px;border:0;font-weight:700;color:#fff;background:linear-gradient(180deg,var(--accent),#8e2722);transition:transform var(--transition),box-shadow var(--transition)}
+button[type="reset"]{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+button:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,0.6)}
+
+/* enlaces externos */
+a[target="_blank"]{position:relative}
+a[target="_blank"]::after{content:"↗";margin-left:0.35rem;font-size:0.8rem;color:var(--muted)}
+
+/* pequeños elementos del aside y artículos */
+aside article{margin-bottom:0.8rem;padding-bottom:0.4rem;border-bottom:1px dashed rgba(255,255,255,0.03)}
+
+/* utilidades */
+.center{display:flex;align-items:center;justify-content:center}
+.kicker{font-size:0.85rem;color:var(--accent);font-weight:700}
+
+/* animaciones */
+@keyframes glow{
+    0%,100%{text-shadow:0 2px 18px rgba(192,57,43,0.12)}
+    50%{text-shadow:0 6px 28px rgba(192,57,43,0.28)}
+}
+
+/* RESPONSIVE: en móviles se apilan todo y nav vertical */
+@media (max-width:900px){
+    body{padding:1rem}
+    .container{grid-template-areas:
+        "header"
+        "nav"
+        "main"
+        "aside"
+        "footer"}
+    nav ul{flex-direction:column;align-items:stretch}
+    ol li{flex-direction:column}
+    ol li figure{width:100%;flex:1}
+    header::after{display:none}
+    aside{order:4}
+    main{order:3}
+    form .form-row{flex-direction:column}
+    header h1{font-size:1.35rem}
+}
+
+/* mayor resolución: muestra main y aside en columnas y centra la grilla */
+@media (min-width:1100px){
+    /* en pantallas grandes .container pasa a layout con aside a la derecha */
+    .container{
+        grid-template-areas:
+            "header header"
+            "nav nav"
+            "main aside"
+            "footer footer";
+        grid-template-columns: 1fr 320px;
+    }
+    main{min-height:420px}
+}
